@@ -2,12 +2,12 @@
 ## Usage
 
 ```sh
-bash python.sh
+sh python.sh
 ```
 
 
 ```sh
-bash github.sh "Project Name" $pwd
+sh github.sh "Project Name" $pwd
 ```
 
 ## Example
