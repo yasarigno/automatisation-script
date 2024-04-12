@@ -1,9 +1,9 @@
 
 # Create a well-structured python project and its repository on GitHub
 
-It is a software engineering routine to create a project and put it a remote repository. I wrote scripts to automatise this task for python projects. These scripts may save your ~10 minutes per project. 🙃
+It is a software engineering routine to create a project and store it a remote repository. I have written scripts to automatise this task for python projects. These scripts can potentially save you ~10 minutes per project. 🙃
 
-_TL;DR This is a one-click solution to create a typical python project folder structure and its GitHub repository. Check out the image of the folder structure to get a visual idea._
+_TL;DR This is a one-click solution to create a typical python project folder structure and its GitHub repository. See the image of the folder structure_
 
 <div align="center">
 <img src="./content/sample.png" alt="overview" height=400px/>
