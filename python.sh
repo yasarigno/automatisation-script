@@ -8,11 +8,11 @@ yellow=$(tput setaf 3)
 red=$(tput setaf 1)
 
 # Ask for the folder location
-read -p "${bold}Enter the path where you want to create the folder (press Enter for the current directory): " folder_location
+read -p "${bold}Enter the path where you want to create the folder (press Enter for the current directory): ${reset}" folder_location
 folder_location="${folder_location:-$(pwd)}"
 
 # Ask for the folder name
-read -p "${bold}Enter the name of the folder: " folder_name
+read -p "${bold}Enter the name of the folder: ${reset}" folder_name
 echo
 
 # Get the parent directory
@@ -20,7 +20,7 @@ parent_dir="${folder_location%/}/"
 
 # Check if the folder already exists
 if [ -d "$parent_dir/$folder_name" ]; then
-    echo -e "${bold}${red}Error: Folder '$folder_name' already exists in $parent_dir."
+    echo -e "${red}Error: Folder '$folder_name' already exists in $parent_dir.${reset}"
     exit 1
 fi
 
@@ -31,7 +31,7 @@ mkdir "$new_folder"
 # Check if the folder creation was successful
 if [ $? -ne 0 ]; then 
 	# ici $? veut dire "ça va?". Si "true" ça donne 0.
-    echo "${bold}${red}Error: Failed to create folder '$folder_name' in $parent_dir."
+    echo "${red}Error: Failed to create folder '$folder_name' in $parent_dir.${reset}"
     exit 1
 fi
 
@@ -97,6 +97,13 @@ Note: You can delete the unnecessary folders via
 \`\`\`bash
 rm -rf 
 \`\`\`
+
+<div style="text-align:center; margin-top: 40px;">
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/frattini)
+
+</div>
+
 EOF
 
 # Create main.py file
@@ -134,13 +141,38 @@ black:
 	@black .
 
 lint: 
-	@pylint --disable=R,C main.py
+	@pylint --disable=R,C *
 
 clean:
 	@echo "ATTENTION: Don't forget to deactivate the virtual environment."
 	@echo "Cleaning up..."
 	@rm -rf $(VENV_NAME)
 	@echo "Cleanup complete."
+
+create-dockerfile:
+	@if [ -e "Dockerfile" ]; then \
+	    echo "Dockerfile already exists. Aborting."; \
+	else \
+	    echo "Creating Dockerfile..."; \
+	    echo "# Use an official Python runtime as a parent image" > Dockerfile; \
+	    echo "FROM python:3.8-slim" >> Dockerfile; \
+	    echo "" >> Dockerfile; \
+	    echo "# Set the working directory to /app" >> Dockerfile; \
+	    echo "WORKDIR /app" >> Dockerfile; \
+	    echo "" >> Dockerfile; \
+	    echo "# Copy the current directory contents into the container at /app" >> Dockerfile; \
+	    echo "COPY . /app" >> Dockerfile; \
+	    echo "" >> Dockerfile; \
+	    echo "# Install any needed packages specified in requirements.txt" >> Dockerfile; \
+	    echo "RUN pip install --no-cache-dir -r requirements.txt" >> Dockerfile; \
+	    echo "" >> Dockerfile; \
+	    echo "# Make port 80 available to the world outside this container" >> Dockerfile; \
+	    echo "EXPOSE 80" >> Dockerfile; \
+	    echo "" >> Dockerfile; \
+	    echo "# Run main.py when the container launches" >> Dockerfile; \
+	    echo "CMD [\"python\", \"main.py\"]" >> Dockerfile; \
+	    echo "Dockerfile created successfully."; \
+	fi
 EOF
 
 # Create requirements file
@@ -170,7 +202,7 @@ CMD ["python", "main.py"]
 EOF
 
 # Done
-echo "${bold}${green}Folder '$folder_name' created successfully in $parent_dir.${reset}"
+echo "${green}Folder '$folder_name' created successfully in $parent_dir.${reset}"
 echo
 
 # Ask for the creation of a repo
@@ -181,5 +213,5 @@ if [ "$answer" = "y" ]; then
     bash github.sh "$folder_name" "$folder_location"
     echo "Creating a GitHub repo..."
 else
-    echo "GitHub repository creation aborted."
+    echo "${bold}GitHub repository creation aborted.${reset}"
 fi
